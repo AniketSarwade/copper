@@ -1,0 +1,354 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Copper Utensils</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Allura&display=swap">
+
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Georgia', serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f0e1;
+            color: #3d2c2e;
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #b87333; /* Royal copper color */
+            padding: 10px 20px; /* Reduced padding for a smaller height */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            z-index: 10;
+            color: #fff;
+            text-align: center;
+            font-family: 'Allura', cursive; /* Allura font for header */
+            font-size: 1.0em; /* Slightly smaller font size */
+            line-height: 1.2; /* Adjust line height to fit content better */
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 0;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            margin: 0;
+        }
+
+        .slideshow-container {
+            position: relative;
+            width: 100%;
+            height: 550px; /* Reduced height */
+            overflow: hidden;
+            margin-top: 80px; /* Space below the fixed header */
+        }
+
+        .slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            display: none;
+        }
+
+        .slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Ensure image covers the container */
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px; /* Space between cards */
+            margin: 20px;
+        }
+
+        /* Card Styles */
+        .card {
+            display: flex;
+            flex-direction: column;
+            align-items: center; /* Center the circle with respect to description */
+        }
+
+        .circle {
+            position: relative;
+            width: 230px; /* Circle diameter */
+            height: 300px; /* Circle diameter */
+            background-size: cover; /* Ensure background image covers the circle */
+            background-repeat: no-repeat; /* Prevent background repeat */
+            background-position: center; /* Center the background image */
+            border-radius: 50%; /* Make the shape circular */
+            border: 5px solid maroon; /* Maroon border on all sides */
+            overflow: hidden; /* Hide overflow for image zoom effect */
+            transition: transform 0.3s ease;
+        }
+
+        /* Adjust image size and positioning */
+        .circle img {
+            width: 100%; /* Image width set to fill the circle */
+            height: 100%; /* Image height set to fill the circle */
+            object-fit: cover; /* Cover the container without distortion */
+            transform: scale(1); /* Default scale */
+            transition: transform 0.3s ease;
+        }
+
+        .circle:hover img {
+            transform: scale(1.2); /* Zoom effect on hover */
+        }
+
+        /* Description Below Circle */
+        .description {
+            text-align: center;
+            margin-top: 10px; /* Space between circle and description */
+            cursor: pointer; /* Change cursor to pointer */
+        }
+
+        .description h2 {
+            color: #b87333;
+            margin: 10px 0;
+        }
+
+        .description p {
+            text-align: justify;
+            padding: 0 10px;
+        }
+
+        .description .price {
+            font-size: 1.2em;
+            color: #ad5c51;
+        }
+
+        @media (max-width: 768px) {
+            .circle {
+                width: 150px; /* Smaller circle size */
+                height: 150px; /* Smaller circle size */
+            }
+        }
+
+        @media (max-width: 480px) {
+            .circle {
+                width: 120px; /* Even smaller circle size */
+                height: 120px; /* Even smaller circle size */
+            }
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+            z-index: 100;
+        }
+
+        .modal-content {
+            display: flex;
+            position: relative;
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 900px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            flex-direction: row;
+        }
+
+        .modal-content img {
+            width: 40%;
+            height: auto;
+            object-fit: contain;
+            margin-right: 20px;
+        }
+
+        .modal-content div {
+            flex: 1;
+        }
+
+        .modal .close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            font-weight: bold;
+            color: #b87333;
+            cursor: pointer;
+        }
+
+        .modal .close:hover {
+            color: #ad5c51;
+        }
+
+        .modal h3 {
+            color: #b87333;
+        }
+
+        .modal .price {
+            font-size: 1.5em;
+            color: #ad5c51;
+        }
+
+        .modal button {
+            background-color: #b87333;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            cursor: pointer;
+            margin: 10px;
+            border-radius: 5px;
+        }
+
+        .modal button:hover {
+            background-color: #ad5c51;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #b87333; /* Matching the header color */
+            color: #fff;
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+            box-shadow: 0 -4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        footer a {
+            color: #fff;
+            text-decoration: none;
+            margin: 0 10px;
+            font-weight: bold;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CopperCraft</h1>
+        <h2>The ancient metal for modern health.</h2>
+    </header>
+
+    <div class="slideshow-container">
+        <div class="slide"><img src="slideshow/s1.jpg" alt="Slideshow Image 1"></div>
+        <div class="slide"><img src="slideshow/s2.jpg" alt="Slideshow Image 2"></div>
+        <div class="slide"><img src="slideshow/s3.jpg" alt="Slideshow Image 3"></div>
+        <div class="slide"><img src="slideshow/s4.jpg" alt="Slideshow Image 4"></div>
+        <div class="slide"><img src="slideshow/s5.jpg" alt="Slideshow Image 5"></div>
+        <div class="slide"><img src="slideshow/s6.jpg" alt="Slideshow Image 6"></div>
+        <div class="slide"><img src="slideshow/s7.jpg" alt="Slideshow Image 7"></div>
+        <!-- Add more slides as needed -->
+    </div>
+
+    <div class="container">
+        <div class="card">
+            <div class="circle" style="background-image: url('images/copper_pot1.jpg');">
+                <img src="images/copper_pot1.jpg" alt="Copper Pot"> <!-- Image inside the circle -->
+            </div>
+            <div class="description" onclick="openModal('images/copper_pot1.jpg', 'Copper Pot', 'Rs. 3000', 'Handcrafted copper pot with intricate patterns.')">
+                <h2>Copper Pot</h2>
+                <p>Handcrafted copper pot with intricate patterns.</p>
+                <div class="price">Rs. 3000</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="circle" style="background-image: url('images/copper_kettle1.jpg');">
+                <img src="images/copper_kettle1.jpg" alt="Copper Kettle"> <!-- Image inside the circle -->
+            </div>
+            <div class="description" onclick="openModal('images/copper_kettle1.jpg', 'Copper kettle', 'Rs. 2500', 'Elegant copper vase with intricate designs.')">
+                <h2>Copper kettle</h2>
+                <p>Elegant copper kettle with intricate designs.</p>
+                <div class="price">Rs. 2500</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="circle" style="background-image: url('images/copper_bowl1.jpg');">
+                <img src="images/copper_bowl1.jpg" alt="Copper Kettle"> <!-- Image inside the circle -->
+            </div>
+            <div class="description" onclick="openModal('images/copper_bowl1.jpg', 'Copper bowl', 'Rs. 2500', 'Elegant copper vase with intricate designs.')">
+                <h2>Copper bowl</h2>
+                <p>Elegant copper bowl with intricate designs.</p>
+                <div class="price">Rs. 2500</div>
+            </div>
+        </div>
+
+        <!-- Add more cards as needed -->
+    </div>
+
+    <div id="myModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <img id="modalImage" src="" alt="Modal Image">
+            <div>
+                <h3 id="modalTitle">Title</h3>
+                <p id="modalDescription">Description</p>
+                <div id="modalPrice" class="price">Price</div>
+                <button onclick="window.location.href='footer.html'">Buy Now</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Placeholder for footer -->
+    <div id="footer-placeholder"></div>
+
+    <script>
+        // Load footer content
+        function loadFooter() {
+            fetch('footer.html')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('footer-placeholder').innerHTML = data;
+                })
+                .catch(error => console.error('Error loading footer:', error));
+        }
+
+        let slideIndex = 0;
+
+        function showSlides() {
+            let slides = document.getElementsByClassName("slide");
+            for (let i = 0; i < slides.length; i++) {
+                slides[i].style.display = "none";
+            }
+            slideIndex++;
+            if (slideIndex > slides.length) {
+                slideIndex = 1;
+            }
+            slides[slideIndex - 1].style.display = "block";
+            setTimeout(showSlides, 2000); // Change slide every 2 seconds
+        }
+
+        function openModal(imageSrc, title, price, description) {
+            document.getElementById('modalImage').src = imageSrc;
+            document.getElementById('modalTitle').innerText = title;
+            document.getElementById('modalPrice').innerText = price;
+            document.getElementById('modalDescription').innerText = description;
+            document.getElementById('myModal').style.display = "flex";
+        }
+
+        function closeModal() {
+            document.getElementById('myModal').style.display = "none";
+        }
+
+        // Initialize slideshow and load footer
+        showSlides();
+        loadFooter();
+    </script>
+</body>
+</html>
